@@ -1,4 +1,4 @@
-package com.simpledevicedatabase.domain;
+package com.simpledevicedatabase.simpleddb.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

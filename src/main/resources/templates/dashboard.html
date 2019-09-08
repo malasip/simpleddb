@@ -120,31 +120,15 @@
               </tr>
             </thead>
             <tbody>
-            {% for device in data %}
-              <tr class="device">
-                <th scope="row"><a href="#{{ device.name }}" class="device-link" aria-expanded="false" data-toggle="modal" data-device_id="{{ device.id }}" data-target="#deviceDetailModal">{{ device.name }}</a></th>
-                <td>{{ device.type }}</td>
-                <td>{{ device.model }}</td>
-                <td>
-                {% for component in device.components %}
-                  {% if component.type == "Wifi adapter" or component.type == "Ethernet adapter" %}
-                    {% if component.ipAddress is not None %}
-                      {{ component.ipAddress }}/
-                    {% else %}
-                      DHCP/
-                    {% endif %}
-                    {{ component.value }}
-                    <br>
-                  {% endif %}
-                {% endfor %}
-                </td>
-                <td>{{ device.serial_no }}</td>
-                <td>{{ device.purchase_date }}</td>
+              <tr th:each="device: ${deviceList}" class="device">
+                <th scope="row"><a th:href="${device.name}" th:text="${device.name}" href="#${device.name}" tclass="device-link" aria-expanded="false" data-toggle="modal" data-device_id="${device.id}" data-target="#deviceDetailModal">{{ device.name }}"</a></th>
+                <td th:text="${device.type}">{{ device.type }}</td>
+                <td th:text="${device.model}">{{ device.model }}</td>
+                <td th:text="${device.ipAddress} + '/ ' + ${device.macAddress}">{{ device.ipAddress }}/ {{ device.macAddress }}</td>
+                <td th:text="${device.serial}">{{ device.serial_no }}</td>
+                <td th:text="${device.purchaseDate}">{{ device.purchase_date }}</td>
                 <td>{{ device.comment }}</td>
               </tr>
-            {% empty %}
-              <p>No devices in database.</p>
-            {% endfor %}
             </tbody>
           </table>
         </div>
