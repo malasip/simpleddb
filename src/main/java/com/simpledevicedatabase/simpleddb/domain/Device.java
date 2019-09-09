@@ -4,17 +4,25 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Device {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String name, type, model, ipAddress, macAddress, serial, purchaseDate;
+	private String name, ipAddress, macAddress, serial, purchaseDate;
+	@ManyToOne
+	@JoinColumn(name = "typeId")
+	private DeviceType type;
+	@ManyToOne
+	@JoinColumn(name = "modelId")
+	private DeviceModel model;
 
     public Device() {}
 
-	public Device(String name, String type, String model, String ipAddress, String macAddress, String serial, String purchaseDate) {
+	public Device(String name, DeviceType type, DeviceModel model, String ipAddress, String macAddress, String serial, String purchaseDate) {
 		super();
 		this.name = name;
 		this.type = type;
@@ -51,25 +59,25 @@ public class Device {
 	/**
 	 * @return the type
 	 */
-	public String getType() {
+	public DeviceType getType() {
 		return type;
 	}
 	/**
 	 * @param type the type to set
 	 */
-	public void setType(String type) {
+	public void setType(DeviceType type) {
 		this.type = type;
 	}
 	/**
 	 * @return the model
 	 */
-	public String getModel() {
+	public DeviceModel getModel() {
 		return model;
 	}
 	/**
 	 * @param model the model to set
 	 */
-	public void setModel(String model) {
+	public void setModel(DeviceModel model) {
 		this.model = model;
 	}
 	/**
