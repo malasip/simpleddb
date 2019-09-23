@@ -12,10 +12,18 @@ $(document).ready(function(){
         var modal = $(this)
         modal.find('.modal-body').load("/dashboard/addDeviceForm");
     });
-    $('#deviceDetailModal').on('show.bs.modal', function (event) {
-        var modal = $(this)
-        var button = $(event.relatedTarget)
-        var id = button.data('device_id')
-        modal.find('.modal-body').load("/device?id=" + id);
+    $('.device-link').on('click', function (event) {
+        var id = $(this).attr('href');
+        var device = "/device?id=" + id
+        var modal = $('#deviceDetailModal').modal({
+            show: false,
+        });
+        modal.find('.modal-body').load(device, function() {
+            $('#device-model').selectpicker({
+                liveSearch: true,
+                width: '100%',
+            });
+        });
+        modal.modal('show'); 
     });
 });

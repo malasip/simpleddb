@@ -32,6 +32,9 @@ public class SimpleDeviceDatabase {
 			dmrepository.save(new DeviceModel("EliteBook 840 G6"));
 			drepository.save(new Device("VJ288", dtrepository.findByName("Desktop"), dmrepository.findByName("OptiPlex 3060"), "192.168.1.15", "AB:C4:09:00:B2:C5", "ABCDEF1234", "18.05.2018"));
 			drepository.save(new Device("VE192", dtrepository.findByName("Laptop"), dmrepository.findByName("EliteBook 840 G6"), "192.168.1.102", "EE:4B:30:02:2C:FF", "ZYFK898A", "03.08.2019"));
+			for (DeviceType type : dtrepository.findAll()) {
+				System.out.println(type.toString());
+			}
 			/*
 			for (Device device : repository.findAll()) {
 				System.out.println(device.toString());

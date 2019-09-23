@@ -1,7 +1,43 @@
-<p th:text="${device.name}"></p>
-<p th:text="${device.type.name}"></p>
-<p th:text="${device.model.name}"></p>
 <p th:text="${device.ipAddress}"></p>
 <p th:text="${device.macAddress}"></p>
 <p th:text="${device.serial}"></p>
 <p th:text="${device.purchaseDate}"></p>
+<form action="#" th:action="@{/saveDevice}" th:object="${device}" method="post">
+    <div class="form-group row">
+        <label for="device-name" class="col-sm-4 col-form-label">Name</label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" id="device-name" placeholder="Device name" value="Null" th:field="*{name}">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="device-type" class="col-sm-4 col-form-label">Type</label>
+        <div class="col-sm-8">
+            <select class="custom-select mr-sm-2" id="device-type" th:field="*{type.id}" >
+                <option th:each="type : ${deviceTypes}" 
+                        th:value="${type.id}"
+                        th:text="${type.name}">Wireframe</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="device-model" class="col-sm-4 col-form-label">Model</label>
+        <div class="col-sm-8">
+            <select class="" id="device-model" th:field="*{model.id}">
+                <option th:each="model : ${deviceModels}" 
+                        th:value="${model.id}"
+                        th:text="${model.name}">Wireframe</option>
+            </select>                     
+        </div>
+    </div>
+    <div class="form-group row">
+            <label for="device-ipaddress" class="col-sm-4 col-form-label">IPAddress</label>
+            <div class="col-sm-8">
+                <select class="" id="device-ipaddress" th:field="*{ipAddress.id}">
+                    <option th:each="ipAddress : ${ipAddressList}" 
+                            th:value="${ipAddress.id}"
+                            th:text="${ipAddress.name}">Wireframe</option>
+                </select>                     
+            </div>
+        </div>
+    <button class="btn btn-primary" type="submit">Submit form</button>
+</form>
