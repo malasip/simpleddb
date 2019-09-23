@@ -12,7 +12,7 @@ public class Device {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-	private String name, ipAddress, macAddress, serial, purchaseDate;
+	private String name, ipAddress, macAddress, serial, purchaseDate, comment;
 	@ManyToOne
 	@JoinColumn(name = "typeId")
 	private DeviceType type;
@@ -22,7 +22,7 @@ public class Device {
 
     public Device() {}
 
-	public Device(String name, DeviceType type, DeviceModel model, String ipAddress, String macAddress, String serial, String purchaseDate) {
+	public Device(String name, DeviceType type, DeviceModel model, String ipAddress, String macAddress, String serial, String purchaseDate, String comment) {
 		super();
 		this.name = name;
 		this.type = type;
@@ -31,6 +31,7 @@ public class Device {
 		this.macAddress = macAddress;
 		this.serial = serial;
 		this.purchaseDate = purchaseDate;
+		this.comment = comment;
 	}
 	/**
 	 * @return the id
@@ -127,6 +128,18 @@ public class Device {
 	 */
 	public void setPurchaseDate(String purchaseDate) {
 		this.purchaseDate = purchaseDate;
+	}
+	/**
+	 * @return the comment
+	 */
+	public String getComment() {
+		return comment;
+	}
+	/**
+	 * @param comment the comment to set
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 	@Override
 	public String toString() {

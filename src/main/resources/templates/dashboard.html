@@ -81,10 +81,6 @@
               <div class="modal-body">
                   ...
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-              </div>
             </div>
           </div>
         </div>
@@ -100,9 +96,6 @@
               <div class="modal-body">
                   ...
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
             </div>
           </div>
         </div>
@@ -113,7 +106,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Type</th>
                 <th scope="col">Model</th>
-                <th scope="col">IP Address/ MAC</th>
+                <th scope="col">IP Address</th>
                 <th scope="col">Serial</th>
                 <th scope="col">Purchase date</th>
                 <th scope="col">Comment</th>
@@ -124,10 +117,10 @@
                 <th scope="row"><a th:href="${device.id}" th:text="${device.name}" href="#" class="device-link" aria-expanded="false" data-toggle="modal">{{ device.name }}"</a></th>
                 <td th:text="${device.type.name}">{{ device.type }}</td>
                 <td th:text="${device.model.name}">{{ device.model }}</td>
-                <td th:text="${device.ipAddress} + '/ ' + ${device.macAddress}">{{ device.ipAddress }}/ {{ device.macAddress }}</td>
+                <td th:text="${device.ipAddress}">{{ device.ipAddress }}</td>
                 <td th:text="${device.serial}">{{ device.serial_no }}</td>
                 <td th:text="${device.purchaseDate}">{{ device.purchase_date }}</td>
-                <td>{{ device.comment }}</td>
+                <td th:text="${device.comment}">{{ device.comment }}</td>
               </tr>
             </tbody>
           </table>
