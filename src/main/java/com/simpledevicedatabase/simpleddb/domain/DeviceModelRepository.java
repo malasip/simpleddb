@@ -1,6 +1,6 @@
 package com.simpledevicedatabase.simpleddb.domain;
 
-import java.util.List;
+//import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
