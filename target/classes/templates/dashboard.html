@@ -63,38 +63,23 @@
           <h2 class="h2">Device listing</h2>
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group">
-              <button class="btn btn-secondary btn-lg" type="button" data-toggle="modal" data-target="#addDeviceModal">
+              <button class="btn btn-secondary btn-lg" id="addDeviceButton" type="button">
                 Add new device
               </button>
             </div>
           </div>
         </div>
-        <div class="modal fade" id="addDeviceModal" tabindex="-1" role="dialog" aria-labelledby="addDeviceModalLabel" aria-hidden="true">
+        <div class="modal fade" id="deviceModal" tabindex="-1" role="dialog" aria-labelledby="deviceModalLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="addDeviceModalLabel">Add new device</h5>
+                <h5 class="modal-title" id="deviceModalLabel">Device details</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div class="modal-body">
-                  ...
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal fade" id="deviceDetailModal" tabindex="-1" role="dialog" aria-labelledby="deviceDetailModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="deviceDetailModalLabel">Device details</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                  ...
+                  Loading...
               </div>
             </div>
           </div>
@@ -112,16 +97,7 @@
                 <th scope="col">Comment</th>
               </tr>
             </thead>
-            <tbody>
-              <tr th:each="device: ${deviceList}" class="device">
-                <th scope="row"><a th:href="${device.id}" th:text="${device.name}" href="#" class="device-link" aria-expanded="false" data-toggle="modal">{{ device.name }}"</a></th>
-                <td th:text="${device.type.name}">{{ device.type }}</td>
-                <td th:text="${device.model.name}">{{ device.model }}</td>
-                <td th:text="${device.ipAddress}">{{ device.ipAddress }}</td>
-                <td th:text="${device.serial}">{{ device.serial_no }}</td>
-                <td th:text="${device.purchaseDate}">{{ device.purchase_date }}</td>
-                <td th:text="${device.comment}">{{ device.comment }}</td>
-              </tr>
+            <tbody id="deviceList">
             </tbody>
           </table>
         </div>

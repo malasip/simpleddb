@@ -21,4 +21,8 @@ public class DashboardController {
         model.addAttribute("deviceList", drepository.findAll());
         return "dashboard";
     }
+    @RequestMapping("/dashboard/modal/device")
+    public String deviceModal(Model model) {
+        return "deviceModal";
+    }
 }
