@@ -1,9 +1,9 @@
 package com.simpledevicedatabase.simpleddb.web;
 
 //import com.simpledevicedatabase.simpleddb.domain.Device;
-import com.simpledevicedatabase.simpleddb.domain.DeviceRepository;
+//import com.simpledevicedatabase.simpleddb.domain.DeviceRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
@@ -13,16 +13,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class DashboardController {
-    @Autowired
-    private DeviceRepository drepository;
 
     @RequestMapping("/dashboard")
     public String dashboard(Model model) {
-        model.addAttribute("deviceList", drepository.findAll());
-        return "dashboard";
+        return "index";
+    }
+    @RequestMapping("/dashboard/admin/models")
+    public String models(Model model) {
+        return "deviceModels";
+    }
+    @RequestMapping("/dashboard/admin/types")
+    public String types(Model model) {
+        return "deviceTypes";
+    }
+    @RequestMapping("/dashboard/admin/users")
+    public String users(Model model) {
+        return "users";
     }
     @RequestMapping("/dashboard/modal/device")
     public String deviceModal(Model model) {
         return "deviceModal";
+    }
+    @RequestMapping("/dashboard/modal/singleValueModal")
+    public String singleValueModal(Model model) {
+        return "singleValueModal";
     }
 }

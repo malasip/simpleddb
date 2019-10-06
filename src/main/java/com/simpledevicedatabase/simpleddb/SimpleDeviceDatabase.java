@@ -5,16 +5,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.simpledevicedatabase.simpleddb.domain.*;
-/*
-import com.simpledevicedatabase.simpleddb.domain.Device;
+import com.simpledevicedatabase.simpleddb.domain.User;
+import com.simpledevicedatabase.simpleddb.domain.UserRepository;
 import com.simpledevicedatabase.simpleddb.domain.DeviceType;
 import com.simpledevicedatabase.simpleddb.domain.DeviceModel;
 import com.simpledevicedatabase.simpleddb.domain.DeviceModelRepository;
 import com.simpledevicedatabase.simpleddb.domain.DeviceRepository;
 import com.simpledevicedatabase.simpleddb.domain.DeviceTypeRepository;
-import com.simpledevicedatabase.simpleddb.domain.DeviceModelRepository;
-*/
+
 @SpringBootApplication
 public class SimpleDeviceDatabase {
 
@@ -23,25 +21,16 @@ public class SimpleDeviceDatabase {
 	}
 
 	@Bean
-	public CommandLineRunner deviceDemo(DeviceRepository drepository, DeviceTypeRepository dtrepository, DeviceModelRepository dmrepository) {
+	public CommandLineRunner deviceDemo(UserRepository urepository, DeviceRepository drepository, DeviceTypeRepository dtrepository, DeviceModelRepository dmrepository) {
 		return (args) -> {
-			
+			urepository.save(new User("admin", "$2a$10$Hg1Lg3TyNHngcHbuUup/4uiXbu7BVd9bERV4W5MgHiYjzM7cJq8eC", "admin@local", "ADMIN", true));
+			urepository.save(new User("user", "$2a$10$Hg1Lg3TyNHngcHbuUup/4uiXbu7BVd9bERV4W5MgHiYjzM7cJq8eC", "user@local", "USER", true));
+			User user = urepository.findByUsername("admin");
+			System.out.println(user.getRole());
 			dtrepository.save(new DeviceType("Desktop"));
 			dtrepository.save(new DeviceType("Laptop"));
 			dmrepository.save(new DeviceModel("OptiPlex 3060"));
 			dmrepository.save(new DeviceModel("EliteBook 840 G6"));
-			drepository.save(new Device("VJ288", dtrepository.findByName("Desktop"),
-				dmrepository.findByName("OptiPlex 3060"), "192.168.1.15", "AB:C4:09:00:B2:C5", "ABCDEF1234", "18.05.2018", "Test comment"));
-			drepository.save(new Device("VE192", dtrepository.findByName("Laptop"),
-				dmrepository.findByName("EliteBook 840 G6"), "192.168.1.102", "EE:4B:30:02:2C:FF", "ZYFK898A", "03.08.2019", "Test comment"));
-			for (DeviceType type : dtrepository.findAll()) {
-				System.out.println(type.toString());
-			}
-			/*
-			for (Device device : repository.findAll()) {
-				System.out.println(device.toString());
-			}
-			*/
 		};
 	}
 

@@ -6,21 +6,15 @@ import com.simpledevicedatabase.simpleddb.domain.Device;
 import com.simpledevicedatabase.simpleddb.domain.DeviceModelRepository;
 import com.simpledevicedatabase.simpleddb.domain.DeviceRepository;
 import com.simpledevicedatabase.simpleddb.domain.DeviceTypeRepository;
-import com.simpledevicedatabase.simpleddb.domain.DeviceType;
+/*import com.simpledevicedatabase.simpleddb.domain.DeviceType;
 import com.simpledevicedatabase.simpleddb.domain.DeviceModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-//import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class DeviceController {
@@ -31,18 +25,6 @@ public class DeviceController {
     @Autowired
     private DeviceModelRepository dmrepository;
 
-    @GetMapping("/device/add")
-    public String device(Model model) {
-        model.addAttribute("device", new Device());
-        model.addAttribute("deviceTypes", dtrepository.findAll());
-        model.addAttribute("deviceModels", dmrepository.findAll());
-        return "addDevice";
-    }
-    @RequestMapping(value = "/device/save", method = RequestMethod.POST)
-    public String save(Device device){
-        drepository.save(device);
-        return "redirect:/dashboard";
-    }
     // REST IMPLEMENTATION
     @GetMapping("/api/device/list")
     public @ResponseBody List<Device> deviceListRest() {
@@ -65,4 +47,4 @@ public class DeviceController {
     public @ResponseBody List<DeviceType> deviceTypeListRest() {
         return (List<DeviceType>) dtrepository.findAll();
     }
-}
+}*/
