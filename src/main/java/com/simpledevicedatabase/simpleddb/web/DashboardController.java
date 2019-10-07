@@ -30,9 +30,9 @@ public class DashboardController {
     public String users(Model model) {
         return "users";
     }
-    @RequestMapping("/dashboard/modal/devicemodal")
+    @RequestMapping("/dashboard/modal/deviceModal")
     public String deviceModal(Model model) {
-        return "devicemodal";
+        return "deviceModal";
     }
     @RequestMapping("/dashboard/modal/userModal")
     public String userModal(Model model) {
