@@ -26,7 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
-                //.loginPage("/dashboard/modal/deviceModal")
+                .loginPage("/dashboard/modal/deviceModal")
                 .permitAll()
                 .and()
             .logout()
