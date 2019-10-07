@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 
 import com.simpledevicedatabase.simpleddb.domain.User;
 import com.simpledevicedatabase.simpleddb.domain.UserRepository;
+import com.simpledevicedatabase.simpleddb.domain.UserRole;
+import com.simpledevicedatabase.simpleddb.domain.UserRoleRepository;
 import com.simpledevicedatabase.simpleddb.domain.DeviceType;
 import com.simpledevicedatabase.simpleddb.domain.DeviceModel;
 import com.simpledevicedatabase.simpleddb.domain.DeviceModelRepository;
@@ -21,12 +23,20 @@ public class SimpleDeviceDatabase {
 	}
 
 	@Bean
-	public CommandLineRunner deviceDemo(UserRepository urepository, DeviceRepository drepository, DeviceTypeRepository dtrepository, DeviceModelRepository dmrepository) {
+	public CommandLineRunner deviceDemo(
+		UserRepository urepository,
+		UserRoleRepository urrepository,
+		DeviceRepository drepository,
+		DeviceTypeRepository dtrepository,
+		DeviceModelRepository dmrepository) {
 		return (args) -> {
-			urepository.save(new User("admin", "$2a$10$Hg1Lg3TyNHngcHbuUup/4uiXbu7BVd9bERV4W5MgHiYjzM7cJq8eC", "admin@local", "ADMIN", true));
-			urepository.save(new User("user", "$2a$10$Hg1Lg3TyNHngcHbuUup/4uiXbu7BVd9bERV4W5MgHiYjzM7cJq8eC", "user@local", "USER", true));
-			User user = urepository.findByUsername("admin");
-			System.out.println(user.getRole());
+			urrepository.save(new UserRole("USER"));
+			urrepository.save(new UserRole("ADMIN"));
+			urepository.save(new User("admin",
+				"$2a$10$Hg1Lg3TyNHngcHbuUup/4uiXbu7BVd9bERV4W5MgHiYjzM7cJq8eC",
+				"admin@local",
+				urrepository.findByName("ADMIN"),
+				true));
 			dtrepository.save(new DeviceType("Desktop"));
 			dtrepository.save(new DeviceType("Laptop"));
 			dmrepository.save(new DeviceModel("OptiPlex 3060"));

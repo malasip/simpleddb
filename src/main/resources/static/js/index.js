@@ -5,7 +5,7 @@ $(document).ready(function(){
         table.search($(this).val()).draw();
     });
     $('#addButton').on('click', function () {
-        var modalBody = "/dashboard/modal/device";
+        var modalBody = "/dashboard/modal/deviceModal";
         var modal = $('#modal').modal({
             show: false,
         });
@@ -106,7 +106,7 @@ function loadTable() {
         fnDrawCallback: function() {
             $('.table-link').on('click', function() {
                 var item = $(this).attr('value');
-                var modalBody = "/dashboard/modal/device";
+                var modalBody = "/dashboard/modal/deviceModal";
                 var modal = $('#modal').modal({
                     show: false,
                 });

@@ -6,7 +6,6 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,8 +21,8 @@ public class UserDetailServiceImpl implements UserDetailsService {
         if (!curruser.getActive()) {
             throw new DisabledException("The account has not been activated");
         }
-        UserDetails user = new org.springframework.security.core.userdetails.User(username, curruser.getPasswordHash(),
-        AuthorityUtils.createAuthorityList(curruser.getRole()));
+        UserDetails user = new org.springframework.security.core.userdetails.User(username, curruser.getPassword(),
+        AuthorityUtils.createAuthorityList(curruser.getRole().getName()));
         return user;
     }
 }

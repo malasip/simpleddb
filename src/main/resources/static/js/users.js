@@ -5,13 +5,17 @@ $(document).ready(function(){
         table.search($(this).val()).draw();
     });
     $('#addButton').on('click', function () {
-        var modalBody = "/dashboard/modal/singleValueModal";
+        var modalBody = "/dashboard/modal/userModal";
         var modal = $('#modal').modal({
             show: false,
         });
         modal.find('.modal-body').load(modalBody, function() {
             $('#modal-delete').remove();
-            $('#singleValueForm').submit(function( event ) {
+            getUserRoleOptions();
+            if (!$('#user-id').val()) {
+                $('#password').prop('required', true);
+            }
+            $('#userForm').submit(function( event ) {
                 event.preventDefault();
                 saveItem(this, function(){table.ajax.reload(null, false)});
             });
@@ -19,6 +23,21 @@ $(document).ready(function(){
         modal.modal('show'); 
     });
 });
+
+function getUserRoleOptions() {
+    $.getJSON('/api/userRoles', function(data) {
+        data._embedded.userRoles.forEach(element => {
+            $('#role').append($('<option>', {
+                value: element._links.self.href,
+                text: element.name
+            }));
+        })
+        $('#role').selectpicker({
+            liveSearch: true,
+            width: '100%',
+        });
+    });
+}
 
 function loadTable() {
     var table = $('#datatable').DataTable({
@@ -38,23 +57,69 @@ function loadTable() {
             },
             {data: 'email'},
             {data: 'lastLogin'},
-            {data: 'role'},
+            {data: null,
+                render: function (data) {
+                    var name;
+                    $.ajax({
+                        async: false,
+                        url: data._links.role.href,
+                        data: {data},
+                        dataType: 'json',
+                        success: function(data) {
+                            name = data.name;
+                        }
+                    });
+                    return name;
+                }
+            },
             {data: 'active'},
         ],
         fnDrawCallback: function() {
             $('.table-link').on('click', function() {
                 var item = $(this).attr('value');
-                var modalBody = "/dashboard/modal/singleValueModal";
+                var modalBody = "/dashboard/modal/userModal";
                 var modal = $('#modal').modal({
                     show: false,
                 });
                 modal.find('.modal-body').load(modalBody, function() {
+                    if(isAdmin()) {
+                        getUserRoleOptions();
+                    }
                     $.getJSON(item, function( data ) {
-                        $('#item-id').val(data._links.self.href);
-                        $('#item-name').val(data.name);
-                        $('#modal-delete').val(data._links.self.href);
+                        $('#user-id').val(data._links.self.href);
+                        $('#username').val(data.username);
+                        $.ajax({
+                            async: true,
+                            url: data._links.role.href,
+                            data: {data},
+                            dataType: 'json',
+                            success: function(data) {
+                                if(isAdmin()) {
+                                    $('#role').selectpicker('val', data._links.self.href);
+                                } else {
+                                    $('#role').append($('<option>', {
+                                        value: data._links.self.href,
+                                        text: data.name
+                                    }));
+                                    $('#role').selectpicker({
+                                        liveSearch: true,
+                                        width: '100%',
+                                    });
+                                }
+                            }
+                        });
+                        $('#email').val(data.email);
+                        if(data.active) {
+                            $('#active').prop("checked", true);
+                        } else {
+                            $('#active').prop("checked", false);
+                        }
+                        if(!isAdmin()) {
+                            $('#userForm :input').prop('disabled', true);
+                            $('#modal-close').prop('disabled', false);
+                        }
                     });
-                    $('#singleValueForm').submit(function( event ) {
+                    $('#userForm').submit(function( event ) {
                         event.preventDefault();
                         saveItem(this, function(){table.ajax.reload(null, false)});
                     });
@@ -71,15 +136,25 @@ function loadTable() {
 }
 
 function saveItem(object, callback) {
+    var bcrypt = dcodeIO.bcrypt;
     var data = {};
-    var url = '/api/deviceTypes';
+    var url = '/api/users';
     var type = 'POST';
     var token = $("meta[name='_csrf']").attr("content");
     $.each($(object).serializeArray(), function(i, v) {
-        data[v.name] = v.value;
+        if(v.name == "password") {
+            if(v.value != "") {
+                data["password"] = bcrypt.hashSync(v.value, 10);
+            }
+        } else if (v.name == "active") {
+            data[v.name] = true;
+        } else {
+            data[v.name] = v.value;
+        }
+        console.log(data[v.name]);
     });
-    if (data['item-id']) {
-        url = data['item-id'];
+    if (data['user-id']) {
+        url = data['user-id'];
         type = 'PATCH';
     }
     $.ajax({
@@ -119,4 +194,11 @@ function deleteItem(object, callback) {
         contentType: "application/json",
         dataType: 'json'
     });
+}
+
+function isAdmin() {
+    if($("meta[name='_csrf']").attr("content")) {
+        return true;
+    }
+    return false;
 }

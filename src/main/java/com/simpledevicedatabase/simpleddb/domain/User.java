@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class User {
@@ -17,7 +19,7 @@ public class User {
     private String username;
 
     @Column(name = "password", nullable = false)
-    private String passwordHash;
+    private String password;
 
     @Column(name = "lastLogin", nullable = true)
     private String lastLogin = "Never";
@@ -25,23 +27,24 @@ public class User {
     @Column(name = "email", nullable = true)
     private String email;
 
-    @Column(name = "role", nullable = false)
-    private String role = "USER";
+    @ManyToOne
+	@JoinColumn(name = "roleName")
+	private UserRole role;
 
     @Column(name = "active", nullable = false)
     private boolean active = false;
-
+    
     public User() {}
 
-    public User(String username, String passwordHash, String email, String role) {
+    public User(String username, String password, String email, UserRole role) {
         this.username = username;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.email= email;
         this.role = role;
     }
-    public User(String username, String passwordHash, String email, String role, boolean active) {
+    public User(String username, String password, String email, UserRole role, boolean active) {
         this.username = username;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.email= email;
         this.role = role;
         this.active = active;
@@ -60,27 +63,27 @@ public class User {
         this.username = username;
     }
     /**
-     * @return the passwordHash
+     * @return the password
      */
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
     /**
-     * @param passwordHash the passwordHash to set
+     * @param password the passwordHash to set
      */
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
     /**
      * @return the role
      */
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
     /**
      * @param role the role to set
      */
-    public void setRole(String role) {
+    public void setUserRole(UserRole role) {
         this.role = role;
     }
     /**

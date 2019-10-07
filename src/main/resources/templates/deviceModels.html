@@ -18,7 +18,7 @@
   <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/dashboard">Device management</a>
-      <input class="form-control form-control-dark w-100" id="search" type="text" placeholder="Search for device" aria-label="Search">
+      <input class="form-control form-control-dark w-100" id="search" type="text" placeholder="Search" aria-label="Search">
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
           <a class="nav-link" href="/logout">Sign out</a>
@@ -30,7 +30,7 @@
         <div class="sidebar-sticky">
           <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1">
             <a class="d-flex align-items-center text-muted" href="#">
-              <span th:inline="text">Logged in as [[${#httpServletRequest.remoteUser}]]!</span>
+              <span th:inline="text">Welcome, <b>[[${#httpServletRequest.remoteUser}]]!</b></span>
             </a>
           </h6>
           <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
