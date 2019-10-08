@@ -31,8 +31,8 @@ function loadTable() {
             'dataSrc': '_embedded.deviceModels',
         },
         'columns': [
-            { "width": "20%" },
             {data: null,
+                width: "20%",
                 render: function (data) {
                     return '<a href="#" value="' + data._links.self.href + '" class="table-link" aria-expanded="false" data-toggle="modal">' + data.name + '</a>'
                 }

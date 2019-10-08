@@ -17,7 +17,7 @@
   </head>
   <body>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/dashboard">Device management</a>
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Device management</a>
       <input class="form-control form-control-dark w-100" id="search" type="text" placeholder="Search" aria-label="Search">
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
@@ -54,6 +54,12 @@
             </a>
           </h6>
           <ul sec:authorize="hasAuthority('ADMIN')" class="nav flex-column mb-2">
+            <li class="nav-item">
+              <a class="nav-link" href="/dashboard">
+                <span data-feather="edit"></span>
+                Devices
+              </a>
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="/dashboard/admin/types">
                 <span data-feather="edit"></span>
