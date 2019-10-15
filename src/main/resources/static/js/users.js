@@ -1,29 +1,3 @@
-var table;
-$(document).ready(function(){
-    table = loadTable();
-    $("#search").on("keyup", function() {
-        table.search($(this).val()).draw();
-    });
-    $('#addButton').on('click', function () {
-        var modalBody = "/dashboard/modal/userModal";
-        var modal = $('#modal').modal({
-            show: false,
-        });
-        modal.find('.modal-body').load(modalBody, function() {
-            $('#modal-delete').remove();
-            getUserRoleOptions();
-            if (!$('#user-id').val()) {
-                $('#password').prop('required', true);
-            }
-            $('#userForm').submit(function( event ) {
-                event.preventDefault();
-                saveItem(this, function(){table.ajax.reload(null, false)});
-            });
-        });
-        modal.modal('show'); 
-    });
-});
-
 function getUserRoleOptions() {
     $.getJSON('/api/userRoles', function(data) {
         data._embedded.userRoles.forEach(element => {
@@ -81,6 +55,7 @@ function loadTable() {
                 var modal = $('#modal').modal({
                     show: false,
                 });
+                $("#modalLabel").text("Edit user");
                 modal.find('.modal-body').load(modalBody, function() {
                     if(isAdmin()) {
                         getUserRoleOptions();
@@ -121,11 +96,11 @@ function loadTable() {
                     });
                     $('#userForm').submit(function( event ) {
                         event.preventDefault();
-                        saveItem(this, function(){table.ajax.reload(null, false)});
+                        saveUser(this, function(){table.ajax.reload(null, false)});
                     });
                     $('#modal-delete').on('click', function() {
                         var item = $(this).attr('value');
-                        deleteItem(item, function(){table.ajax.reload(null, false)});
+                        deleteUser(item, function(){table.ajax.reload(null, false)});
                     })
                 });
                 modal.modal('show'); 
@@ -135,48 +110,49 @@ function loadTable() {
     return table;
 }
 
-function saveItem(object, callback) {
-    var bcrypt = dcodeIO.bcrypt;
-    var data = {};
-    var url = '/api/users';
-    var type = 'POST';
-    var token = $("meta[name='_csrf']").attr("content");
-    $.each($(object).serializeArray(), function(i, v) {
-        if(v.name == "password") {
-            if(v.value != "") {
-                data["password"] = bcrypt.hashSync(v.value, 10);
+function saveUser(object, callback) {
+    $.getScript("https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.js", function(data) {
+        var bcrypt = dcodeIO.bcrypt;
+        var data = {};
+        var url = '/api/users';
+        var type = 'POST';
+        var token = $("meta[name='_csrf']").attr("content");
+        $.each($(object).serializeArray(), function(i, v) {
+            if(v.name == "password") {
+                if(v.value != "") {
+                    data["password"] = bcrypt.hashSync(v.value, 10);
+                }
+            } else if (v.name == "active") {
+                data[v.name] = true;
+            } else {
+                data[v.name] = v.value;
             }
-        } else if (v.name == "active") {
-            data[v.name] = true;
-        } else {
-            data[v.name] = v.value;
+        });
+        if (data['user-id']) {
+            url = data['user-id'];
+            type = 'PATCH';
         }
-        console.log(data[v.name]);
-    });
-    if (data['user-id']) {
-        url = data['user-id'];
-        type = 'PATCH';
-    }
-    $.ajax({
-        type: type,
-        url: url,
-        data: JSON.stringify(data),
-        headers: {
-            "X-CSRF-TOKEN": token
-        },
-        success: function() {
-            $('#modal').modal('hide')
-            callback();
-        },
-        error: function(error) {
-            alert(error.status + " " + error.statusText);
-        },
-        contentType: "application/json",
-        dataType: 'json'
+        $.ajax({
+            type: type,
+            url: url,
+            data: JSON.stringify(data),
+            headers: {
+                "X-CSRF-TOKEN": token
+            },
+            success: function() {
+                $('#modal').modal('hide')
+                callback();
+            },
+            error: function(error) {
+                alert(error.status + " " + error.statusText);
+            },
+            contentType: "application/json",
+            dataType: 'json'
+        });
     });
 }
 
-function deleteItem(object, callback) {
+function deleteUser(object, callback) {
     var token = $("meta[name='_csrf']").attr("content");
     $.ajax({
         type: 'DELETE',

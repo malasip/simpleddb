@@ -1,25 +1,3 @@
-var table;
-$(document).ready(function(){
-    table = loadTable();
-    $("#search").on("keyup", function() {
-        table.search($(this).val()).draw();
-    });
-    $('#addButton').on('click', function () {
-        var modalBody = "/dashboard/modal/singleValueModal";
-        var modal = $('#modal').modal({
-            show: false,
-        });
-        modal.find('.modal-body').load(modalBody, function() {
-            $('#modal-delete').remove();
-            $('#singleValueForm').submit(function( event ) {
-                event.preventDefault();
-                saveItem(this, function(){table.ajax.reload(null, false)});
-            });
-        });
-        modal.modal('show'); 
-    });
-});
-
 function loadTable() {
     var table = $('#datatable').DataTable({
         searching: true,
@@ -70,6 +48,7 @@ function loadTable() {
                 var modal = $('#modal').modal({
                     show: false,
                 });
+                $("#modalLabel").text("Edit device type");
                 modal.find('.modal-body').load(modalBody, function() {
                     $.getJSON(item, function( data ) {
                         $('#item-id').val(data._links.self.href);

@@ -6,6 +6,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import java.util.List;
 
@@ -13,15 +14,17 @@ import javax.persistence.CascadeType;
 
 
 @Entity
+@Table(name="user_role")
 public class UserRole {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id")
     private Long id;
-    @Column(name = "name", nullable = false, updatable = true)
+
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
-    private List<User> users;
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
+    //private List<User> users;
 
     public UserRole() {}
 

@@ -1,27 +1,3 @@
-var table;
-$(document).ready(function(){
-    table = loadTable();
-    $("#search").on("keyup", function() {
-        table.search($(this).val()).draw();
-    });
-    $('#addButton').on('click', function () {
-        var modalBody = "/dashboard/modal/deviceModal";
-        var modal = $('#modal').modal({
-            show: false,
-        });
-        modal.find('.modal-body').load(modalBody, function() {
-            getDeviceModelOptions();
-            getDeviceTypeOptions();
-            $('#modal-delete').remove();
-            $('#deviceForm').submit(function( event ) {
-                event.preventDefault();
-                saveItem(this, function(){table.ajax.reload(null, false)});
-            });
-        });
-        modal.modal('show'); 
-    });
-});
-
 function getDeviceTypeOptions() {
     $.getJSON('/api/deviceTypes', function(data) {
         data._embedded.deviceTypes.forEach(element => {
@@ -110,6 +86,7 @@ function loadTable() {
                 var modal = $('#modal').modal({
                     show: false,
                 });
+                $("#modalLabel").text("Edit device");
                 modal.find('.modal-body').load(modalBody, function() {
                     if(isAdmin()) {
                         getDeviceModelOptions();

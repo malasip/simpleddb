@@ -29,8 +29,8 @@
       <nav class="col-md-1 d-none d-md-block bg-light sidebar">
         <div class="sidebar-sticky">
           <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1">
-            <a class="d-flex align-items-center text-muted" href="#">
-              <span th:inline="text">Welcome, <b>[[${#httpServletRequest.remoteUser}]]!</b></span>
+            <a class="d-flex align-items-center text-muted" id="user" href="#" th:value="${uid}">
+              <span th:inline="text">Welcome, <b sec:authentication="name"></b></span>
             </a>
           </h6>
           <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
@@ -80,7 +80,7 @@
           <h2 class="h2">Device types</h2>
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group">
-              <button class="btn btn-secondary btn-lg" id="addButton" type="button">
+              <button class="btn btn-secondary btn-lg" id="addButton" value="type" type="button">
                 Add new device type
               </button>
             </div>
@@ -90,7 +90,7 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="modal">Type details</h5>
+                <h5 class="modal-title" id="modalLabel">...</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -117,10 +117,23 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script th:src="@{/js/bootstrap.bundle.js}"></script>
+    <script th:src="@{/js/modalButtons.js}"></script>
+    <script th:src="@{/js/users.js}"></script>
     <script th:src="@{/js/types.js}"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/af-2.3.3/b-1.5.6/datatables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+      var table;
+      $(document).ready(function(){
+        table = loadTable();
+        $("#search").on("keyup", function() {
+          table.search($(this).val()).draw();
+        });
+        addSingleValueButton();
+        userButton();
+      });
+    </script>
     <script>
         feather.replace()
     </script>

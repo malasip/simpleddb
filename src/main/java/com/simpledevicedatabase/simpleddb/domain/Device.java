@@ -6,18 +6,37 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Column;
+import javax.persistence.Table;
+
+import org.hibernate.validator.constraints.UniqueElements;
 
 @Entity
+@Table(name="device")
 public class Device {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-	private String name, ipAddress, macAddress, serial, purchaseDate, comment;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "device_id")
+	private Long id;
+	
+	@UniqueElements
+	private String name;
+	
+	@Column(name = "ip_address")
+	private String ipAddress;
+	@Column(name = "mac_address")
+	private String macAddress;
+	@Column(name = "purchase_date")
+	private String purchaseDate;
+	
+	private String serial, comment;
+
 	@ManyToOne
-	@JoinColumn(name = "typeId")
+	@JoinColumn(name = "type_id")
 	private DeviceType type;
+
 	@ManyToOne
-	@JoinColumn(name = "modelId")
+	@JoinColumn(name = "model_id")
 	private DeviceModel model;
 
     public Device() {}

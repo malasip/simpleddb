@@ -18,11 +18,14 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User curruser = urepository.findByUsername(username);
-        if (!curruser.getActive()) {
-            throw new DisabledException("The account has not been activated");
+        if (curruser == null) {
+            throw new UsernameNotFoundException("Invalid username or password");
         }
         UserDetails user = new org.springframework.security.core.userdetails.User(username, curruser.getPassword(),
         AuthorityUtils.createAuthorityList(curruser.getRole().getName()));
+        if (!curruser.getActive()) {
+            throw new DisabledException("The account has not been activated");
+        }
         return user;
     }
 }

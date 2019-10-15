@@ -7,28 +7,34 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
+@Table(name="user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, updatable = false)
+    @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "username", nullable = false, updatable = false, unique = true)
+    //@Column(name = "username", nullable = false, updatable = false, unique = true)
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    //@Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "lastLogin", nullable = true)
+    //@Column(name = "lastLogin", nullable = true)
+    @Column(name = "last_login")
     private String lastLogin = "Never";
 
-    @Column(name = "email", nullable = true)
+    //@Column(name = "email", nullable = true)
     private String email;
 
     @ManyToOne
-	@JoinColumn(name = "roleName")
+    @JoinColumn(name = "role_id")
 	private UserRole role;
 
     @Column(name = "active", nullable = false)
@@ -50,6 +56,12 @@ public class User {
         this.active = active;
     }
 
+    /**
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
     /**
      * @return the username
      */

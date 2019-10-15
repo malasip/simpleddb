@@ -1,33 +1,58 @@
 package com.simpledevicedatabase.simpleddb.web;
 
-//import com.simpledevicedatabase.simpleddb.domain.Device;
-//import com.simpledevicedatabase.simpleddb.domain.DeviceRepository;
-
-//import org.springframework.beans.factory.annotation.Autowired;
+import com.simpledevicedatabase.simpleddb.domain.User;
+import com.simpledevicedatabase.simpleddb.domain.UserRepository;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.ui.Model;
-//import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Controller
 public class DashboardController {
 
+    @Autowired
+    UserRepository urepository;
+
+    @RequestMapping("/")
+    public String index(Model model, @AuthenticationPrincipal UserDetails currentUser) {
+        User user = (User) urepository.findByUsername(currentUser.getUsername());
+        if(user != null) {
+            model.addAttribute("uid", user.getId());
+        }
+        return "index";
+    }
     @RequestMapping("/dashboard")
-    public String dashboard(Model model) {
+    public String dashboard(Model model, @AuthenticationPrincipal UserDetails currentUser) {
+        User user = (User) urepository.findByUsername(currentUser.getUsername());
+        if(user != null) {
+            model.addAttribute("uid", user.getId());
+        }
         return "index";
     }
     @RequestMapping("/dashboard/admin/models")
-    public String models(Model model) {
+    public String models(Model model, @AuthenticationPrincipal UserDetails currentUser) {
+        User user = (User) urepository.findByUsername(currentUser.getUsername());
+        if(user != null) {
+            model.addAttribute("uid", user.getId());
+        }
         return "deviceModels";
     }
     @RequestMapping("/dashboard/admin/types")
-    public String types(Model model) {
+    public String types(Model model, @AuthenticationPrincipal UserDetails currentUser) {
+        User user = (User) urepository.findByUsername(currentUser.getUsername());
+        if(user != null) {
+            model.addAttribute("uid", user.getId());
+        }
         return "deviceTypes";
     }
     @RequestMapping("/dashboard/admin/users")
-    public String users(Model model) {
+    public String users(Model model, @AuthenticationPrincipal UserDetails currentUser) {
+        User user = (User) urepository.findByUsername(currentUser.getUsername());
+        if(user != null) {
+            model.addAttribute("uid", user.getId());
+        }
         return "users";
     }
     @RequestMapping("/dashboard/modal/deviceModal")
