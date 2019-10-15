@@ -30,7 +30,15 @@ function loadTable() {
                 }
             },
             {data: 'email'},
-            {data: 'lastLogin'},
+            {data: null,
+                render: function (data) {
+                    if(data.lastLogin == null) {
+                        return "Never";
+                    } else {
+                        return data.lastLogin;
+                    }
+                }
+            },
             {data: null,
                 render: function (data) {
                     var name;

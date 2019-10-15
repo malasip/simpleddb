@@ -1,5 +1,7 @@
 package com.simpledevicedatabase.simpleddb.domain;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -26,6 +28,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
         if (!curruser.getActive()) {
             throw new DisabledException("The account has not been activated");
         }
+        LocalDateTime date = LocalDateTime.now();
+        curruser.setLastLogin(date);
+        urepository.save(curruser);
         return user;
     }
 }

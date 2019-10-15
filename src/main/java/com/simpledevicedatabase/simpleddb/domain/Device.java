@@ -6,10 +6,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Table;
-
-import org.hibernate.validator.constraints.UniqueElements;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name="device")
@@ -19,7 +21,8 @@ public class Device {
 	@Column(name = "device_id")
 	private Long id;
 	
-	@UniqueElements
+	@NotEmpty(message = "Name is required")
+	@Column(name = "name", unique = true)
 	private String name;
 	
 	@Column(name = "ip_address")
@@ -27,7 +30,7 @@ public class Device {
 	@Column(name = "mac_address")
 	private String macAddress;
 	@Column(name = "purchase_date")
-	private String purchaseDate;
+	private LocalDate purchaseDate;
 	
 	private String serial, comment;
 
@@ -41,7 +44,7 @@ public class Device {
 
     public Device() {}
 
-	public Device(String name, DeviceType type, DeviceModel model, String ipAddress, String macAddress, String serial, String purchaseDate, String comment) {
+	public Device(String name, DeviceType type, DeviceModel model, String ipAddress, String macAddress, String serial, LocalDate purchaseDate, String comment) {
 		super();
 		this.name = name;
 		this.type = type;
@@ -139,13 +142,13 @@ public class Device {
 	/**
 	 * @return the purchaseDate
 	 */
-	public String getPurchaseDate() {
+	public LocalDate getPurchaseDate() {
 		return purchaseDate;
 	}
 	/**
 	 * @param purchaseDate the purchaseDate to set
 	 */
-	public void setPurchaseDate(String purchaseDate) {
+	public void setPurchaseDate(LocalDate purchaseDate) {
 		this.purchaseDate = purchaseDate;
 	}
 	/**

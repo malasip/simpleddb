@@ -1,5 +1,7 @@
 package com.simpledevicedatabase.simpleddb.domain;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -19,18 +23,17 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    //@Column(name = "username", nullable = false, updatable = false, unique = true)
+    @NotEmpty(message = "Username is requried")
     private String username;
 
+    @NotEmpty(message = "Password is required")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    //@Column(name = "password", nullable = false)
     private String password;
 
-    //@Column(name = "lastLogin", nullable = true)
     @Column(name = "last_login")
-    private String lastLogin = "Never";
+    private LocalDateTime lastLogin;
 
-    //@Column(name = "email", nullable = true)
+    @Email
     private String email;
 
     @ManyToOne
@@ -125,13 +128,13 @@ public class User {
     /**
      * @return the lastLogin
      */
-    public String getLastLogin() {
+    public LocalDateTime getLastLogin() {
         return lastLogin;
     }
     /**
      * @param lastLogin the lastLogin to set
      */
-    public void setLastLogin(String lastLogin) {
+    public void setLastLogin(LocalDateTime lastLogin) {
         this.lastLogin = lastLogin;
     }
 

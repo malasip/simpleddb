@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 import java.util.List;
 
@@ -21,10 +22,11 @@ public class UserRole {
     @Column(name = "role_id")
     private Long id;
 
+    @NotEmpty(message = "Name is required")
     private String name;
 
-    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
-    //private List<User> users;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
+    private List<User> users;
 
     public UserRole() {}
 
