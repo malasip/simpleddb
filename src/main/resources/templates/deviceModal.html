@@ -1,5 +1,5 @@
 <form action="#" method="post" id="deviceForm">
-    <input name="device-id" id="device-id" type="hidden"/>
+    <input sec:authorize="isAuthenticated()" name="device-id" id="device-id" type="hidden"/>
     <div class="form-group row">
         <label for="device-name" class="col-sm-4 col-form-label">Name</label>
         <div class="col-sm-8">

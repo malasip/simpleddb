@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="">
-    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta sec:authorize="isAuthenticated()" name="_csrf" th:content="${_csrf.token}"/>
     <title>Simple Device Database</title>
     <!-- <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/dashboard/"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">

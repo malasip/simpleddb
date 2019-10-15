@@ -214,8 +214,21 @@ function deleteItem(object, callback) {
 }
 
 function isAdmin() {
-    if($("meta[name='_csrf']").attr("content")) {
-        return true;
-    }
-    return false;
+    var token = $("meta[name='_csrf']").attr("content");
+    var uid = $('#user').val();
+    console.log(uid);
+    $.ajax({
+        type: 'GET',
+        url: "/api/users/" + uid,
+        headers: {
+            "X-CSRF-TOKEN": token
+        },
+        success: function(data) {
+            console.log(data);
+        },
+        error: function() {
+            return false;
+        },
+    });
+    //return result;
 }
