@@ -142,5 +142,8 @@
     <script>
         feather.replace()
     </script>
+    <script sec:authorize="hasAuthority('ADMIN')">
+        var hasAdmin = true;
+    </script>
   </body>
 </html>

@@ -213,22 +213,23 @@ function deleteItem(object, callback) {
     });
 }
 
-function isAdmin() {
+/*function isAdmin(callback) {
     var token = $("meta[name='_csrf']").attr("content");
-    var uid = $('#user').val();
-    console.log(uid);
+    var uid = $('#user').attr('value');
     $.ajax({
         type: 'GET',
-        url: "/api/users/" + uid,
+        url: "/api/users/" + uid + "/role",
         headers: {
             "X-CSRF-TOKEN": token
         },
         success: function(data) {
-            console.log(data);
+            if(data.name == "ADMIN") {
+                if(callback) callback(true);
+            }
+            if(callback) callback(false);
         },
         error: function() {
-            return false;
+            if(callback) callback(false);
         },
     });
-    //return result;
-}
+}*/
