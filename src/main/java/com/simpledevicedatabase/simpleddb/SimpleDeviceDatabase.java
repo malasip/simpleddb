@@ -22,7 +22,7 @@ public class SimpleDeviceDatabase {
 		SpringApplication.run(SimpleDeviceDatabase.class, args);
 	}
 
-	/*@Bean
+	@Bean
 	public CommandLineRunner deviceDemo(
 		UserRepository urepository,
 		UserRoleRepository urrepository,
@@ -32,15 +32,15 @@ public class SimpleDeviceDatabase {
 		return (args) -> {
 			urrepository.save(new UserRole("USER"));
 			urrepository.save(new UserRole("ADMIN"));
-			urepository.save(new User("admin",
+			/*urepository.save(new User("admin",
 				"$2a$10$Hg1Lg3TyNHngcHbuUup/4uiXbu7BVd9bERV4W5MgHiYjzM7cJq8eC",
 				"admin@local",
 				urrepository.findByName("ADMIN"),
-				true));
+				true));*/
 			dtrepository.save(new DeviceType("Desktop"));
 			dtrepository.save(new DeviceType("Laptop"));
 			dmrepository.save(new DeviceModel("OptiPlex 3060"));
 			dmrepository.save(new DeviceModel("EliteBook 840 G6"));
 		};
-	}*/
+	}
 }

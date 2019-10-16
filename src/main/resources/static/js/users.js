@@ -181,8 +181,19 @@ function deleteUser(object, callback) {
 }
 
 function isAdmin() {
-    if($("meta[name='_csrf']").attr("content")) {
-        return true;
+    /*var uid = $('#user').attr('value');
+    var token = $("meta[name='_csrf']").attr("content");
+    function getData() {
+        return $.ajax({
+            type: 'GET',
+            url: "/api/users/" + uid + "/role",
+            headers: {
+                "X-CSRF-TOKEN": token
+            }
+        });
+    };*/
+    if(typeof hasAdmin === 'undefined') {
+        return false;
     }
-    return false;
+    return hasAdmin;
 }

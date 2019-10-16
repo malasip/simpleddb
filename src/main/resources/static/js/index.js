@@ -213,9 +213,23 @@ function deleteItem(object, callback) {
     });
 }
 
-function isAdmin() {
-    if($("meta[name='_csrf']").attr("content")) {
-        return true;
-    }
-    return false;
-}
+/*function isAdmin(callback) {
+    var token = $("meta[name='_csrf']").attr("content");
+    var uid = $('#user').attr('value');
+    $.ajax({
+        type: 'GET',
+        url: "/api/users/" + uid + "/role",
+        headers: {
+            "X-CSRF-TOKEN": token
+        },
+        success: function(data) {
+            if(data.name == "ADMIN") {
+                if(callback) callback(true);
+            }
+            if(callback) callback(false);
+        },
+        error: function() {
+            if(callback) callback(false);
+        },
+    });
+}*/

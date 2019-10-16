@@ -1,5 +1,5 @@
 <form action="#" method="post" id="singleValueForm">
-    <input name="item-id" id="item-id" type="hidden"/>
+    <input sec:authorize="isAuthenticated()" name="item-id" id="item-id" type="hidden"/>
     <div class="form-group row">
         <label for="item-name" class="col-sm-4 col-form-label">Name</label>
         <div class="col-sm-8">

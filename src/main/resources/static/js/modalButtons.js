@@ -29,7 +29,7 @@ function userButton() {
                 $('#email').val(data.email);
                 $('#active').remove();
                 $('#modal-delete').remove();
-                $('#username').prop('disabled', true);
+                //$('#username').prop('disabled', true);
                 $('#role').prop('disabled', true);
             });
             $('#userForm').submit(function( event ) {
