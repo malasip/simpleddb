@@ -58,82 +58,58 @@ public class User {
         this.role = role;
         this.active = active;
     }
-
-    /**
-     * @return the id
-     */
+    
     public Long getId() {
         return id;
     }
-    /**
-     * @return the username
-     */
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getUsername() {
         return username;
     }
-    /**
-     * @param username the username to set
-     */
+
     public void setUsername(String username) {
         this.username = username;
     }
-    /**
-     * @return the password
-     */
+
     public String getPassword() {
         return password;
     }
-    /**
-     * @param password the passwordHash to set
-     */
+
     public void setPassword(String password) {
         this.password = password;
     }
-    /**
-     * @return the role
-     */
+
     public UserRole getRole() {
         return role;
     }
-    /**
-     * @param role the role to set
-     */
+
     public void setUserRole(UserRole role) {
         this.role = role;
     }
-    /**
-     * @return the email
-     */
+
     public String getEmail() {
         return email;
     }
-    /**
-     * @param email the email to set
-     */
+
     public void setEmail(String email) {
         this.email = email;
     }
-    /**
-     * @param active the active
-     */
+
     public boolean getActive() {
         return active;
     }
-    /**
-     * @param active the active to set
-     */
+ 
     public void setActive(boolean active) {
         this.active = active;
     }
-    /**
-     * @return the lastLogin
-     */
+ 
     public LocalDateTime getLastLogin() {
         return lastLogin;
     }
-    /**
-     * @param lastLogin the lastLogin to set
-     */
     public void setLastLogin(LocalDateTime lastLogin) {
         this.lastLogin = lastLogin;
     }
