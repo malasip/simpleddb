@@ -31,28 +31,9 @@ public class DeviceType {
         this.name = name;
     }
 
-    /**
-     * @return the id
-     */
-    public Long getId() {
-        return type_id;
-    }
-    /**
-     * @param id the id to set
-     */
-    public void setId(Long id) {
-        this.type_id = id;
-    }
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+    //Getters
+    public Long getId() { return type_id; }
+    public String getName() { return name; }
+    //Setters
+    public void setName(String name) { this.name = name; }
 }

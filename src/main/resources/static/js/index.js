@@ -86,7 +86,7 @@ function loadTable() {
                 var modal = $('#modal').modal({
                     show: false,
                 });
-                $("#modalLabel").text("Edit device");
+                $("#modalLabel").text("Device details");
                 modal.find('.modal-body').load(modalBody, function() {
                     if(isAdmin()) {
                         getDeviceModelOptions();

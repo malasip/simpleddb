@@ -12,18 +12,22 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import org.springframework.hateoas.Link;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+//import org.springframework.hateoas.ResourceSupport;
 
 @Entity
 @Table(name="user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false, updatable = false)
     private Long id;
 
     @NotEmpty(message = "Username is requried")
+    @Column(name = "username", nullable = false, updatable = false)
     private String username;
 
     @NotEmpty(message = "Password is required")
@@ -45,6 +49,10 @@ public class User {
     
     public User() {}
 
+    //public User(User user) {}
+
+    //public User(User user, Long id) {}
+
     public User(String username, String password, String email, UserRole role) {
         this.username = username;
         this.password = password;
@@ -59,61 +67,22 @@ public class User {
         this.active = active;
     }
     
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public UserRole getRole() {
-        return role;
-    }
-
-    public void setUserRole(UserRole role) {
-        this.role = role;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public boolean getActive() {
-        return active;
-    }
- 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
- 
-    public LocalDateTime getLastLogin() {
-        return lastLogin;
-    }
-    public void setLastLogin(LocalDateTime lastLogin) {
-        this.lastLogin = lastLogin;
-    }
-
+    //Getters
+    public Long getId() { return id; }
+    //public Link getId() { return id; }
+    public String getUsername() { return username; }
+    public String getPassword() { return password; }
+    public UserRole getRole() { return role; }
+    public String getEmail() { return email; }
+    public boolean getActive() { return active; }
+    public LocalDateTime getLastLogin() { return lastLogin; }
+    //Setters
+    public void setUsername(String username) { this.username = username; }
+    public void setPassword(String password) { this.password = password; }
+    public void setUserRole(UserRole role) { this.role = role; }
+    public void setEmail(String email) { this.email = email; }
+    public void setActive(boolean active) { this.active = active; }
+    public void setLastLogin(LocalDateTime lastLogin) { this.lastLogin = lastLogin; }
 
     @Override
     public String toString() {
