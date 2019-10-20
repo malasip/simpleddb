@@ -92,6 +92,7 @@ function loadTable() {
                             }
                         });
                         $('#email').val(data.email);
+                        $('#modal-delete').val(data._links.self.href);
                         if(data.active) {
                             $('#active').prop("checked", true);
                         } else {
@@ -152,7 +153,9 @@ function saveUser(object, callback) {
                 callback();
             },
             error: function(error) {
-                alert(error.status + " " + error.statusText);
+                error.responseJSON.errors.forEach(element => {
+                    $('#'+ element.field).addClass('is-invalid');
+                })
             },
             contentType: "application/json",
             dataType: 'json'
@@ -181,17 +184,6 @@ function deleteUser(object, callback) {
 }
 
 function isAdmin() {
-    /*var uid = $('#user').attr('value');
-    var token = $("meta[name='_csrf']").attr("content");
-    function getData() {
-        return $.ajax({
-            type: 'GET',
-            url: "/api/users/" + uid + "/role",
-            headers: {
-                "X-CSRF-TOKEN": token
-            }
-        });
-    };*/
     if(typeof hasAdmin === 'undefined') {
         return false;
     }

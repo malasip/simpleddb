@@ -19,7 +19,7 @@ public class DashboardController {
     public String index(Model model, @AuthenticationPrincipal UserDetails currentUser) {
         User user = (User) urepository.findByUsername(currentUser.getUsername());
         if(user != null) {
-            model.addAttribute("uid", user.getId());
+            model.addAttribute("uid", user.getUserId());
         }
         return "index";
     }
@@ -27,7 +27,7 @@ public class DashboardController {
     public String dashboard(Model model, @AuthenticationPrincipal UserDetails currentUser) {
         User user = (User) urepository.findByUsername(currentUser.getUsername());
         if(user != null) {
-            model.addAttribute("uid", user.getId());
+            model.addAttribute("uid", user.getUserId());
         }
         return "index";
     }
@@ -35,7 +35,7 @@ public class DashboardController {
     public String models(Model model, @AuthenticationPrincipal UserDetails currentUser) {
         User user = (User) urepository.findByUsername(currentUser.getUsername());
         if(user != null) {
-            model.addAttribute("uid", user.getId());
+            model.addAttribute("uid", user.getUserId());
         }
         return "deviceModels";
     }
@@ -43,7 +43,7 @@ public class DashboardController {
     public String types(Model model, @AuthenticationPrincipal UserDetails currentUser) {
         User user = (User) urepository.findByUsername(currentUser.getUsername());
         if(user != null) {
-            model.addAttribute("uid", user.getId());
+            model.addAttribute("uid", user.getUserId());
         }
         return "deviceTypes";
     }
@@ -51,7 +51,7 @@ public class DashboardController {
     public String users(Model model, @AuthenticationPrincipal UserDetails currentUser) {
         User user = (User) urepository.findByUsername(currentUser.getUsername());
         if(user != null) {
-            model.addAttribute("uid", user.getId());
+            model.addAttribute("uid", user.getUserId());
         }
         return "users";
     }

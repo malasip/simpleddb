@@ -2,4 +2,8 @@ package com.simpledevicedatabase.simpleddb.domain;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface DeviceRepository extends CrudRepository<Device, Long> { }
+import java.util.List;
+
+public interface DeviceRepository extends CrudRepository<Device, Long> {
+    List<Device> findAll();
+}

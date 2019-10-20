@@ -12,19 +12,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import org.springframework.hateoas.Link;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-//import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.ResourceSupport;
 
 @Entity
 @Table(name="user")
-public class User {
+public class User extends ResourceSupport{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false, updatable = false)
-    private Long id;
+    private Long userId;
 
     @NotEmpty(message = "Username is requried")
     @Column(name = "username", nullable = false, updatable = false)
@@ -49,10 +48,6 @@ public class User {
     
     public User() {}
 
-    //public User(User user) {}
-
-    //public User(User user, Long id) {}
-
     public User(String username, String password, String email, UserRole role) {
         this.username = username;
         this.password = password;
@@ -68,7 +63,7 @@ public class User {
     }
     
     //Getters
-    public Long getId() { return id; }
+    public Long getUserId() { return userId; }
     //public Link getId() { return id; }
     public String getUsername() { return username; }
     public String getPassword() { return password; }

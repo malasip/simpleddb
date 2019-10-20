@@ -77,6 +77,9 @@ function saveItem(object, callback) {
     var type = 'POST';
     var token = $("meta[name='_csrf']").attr("content");
     $.each($(object).serializeArray(), function(i, v) {
+        if(v.value == "") {
+            v.value = null;
+        }
         data[v.name] = v.value;
     });
     if (data['item-id']) {
@@ -95,7 +98,9 @@ function saveItem(object, callback) {
             callback();
         },
         error: function(error) {
-            alert(error.status + " " + error.statusText);
+            error.responseJSON.errors.forEach(element => {
+                $('#'+ element.field).addClass('is-invalid');
+            })
         },
         contentType: "application/json",
         dataType: 'json'

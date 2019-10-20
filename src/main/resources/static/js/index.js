@@ -168,6 +168,9 @@ function saveItem(object, callback) {
     var type = 'POST';
     var token = $("meta[name='_csrf']").attr("content");
     $.each($(object).serializeArray(), function(i, v) {
+        if(v.value == "") {
+            v.value = null;
+        }
         data[v.name] = v.value;
     });
     if (data['device-id']) {
@@ -186,7 +189,9 @@ function saveItem(object, callback) {
             callback();
         },
         error: function(error) {
-            alert(error.status + " " + error.statusText);
+            error.responseJSON.errors.forEach(element => {
+                $('#'+ element.field).addClass('is-invalid');
+            })
         },
         contentType: "application/json",
         dataType: 'json'
@@ -213,23 +218,9 @@ function deleteItem(object, callback) {
     });
 }
 
-/*function isAdmin(callback) {
-    var token = $("meta[name='_csrf']").attr("content");
-    var uid = $('#user').attr('value');
-    $.ajax({
-        type: 'GET',
-        url: "/api/users/" + uid + "/role",
-        headers: {
-            "X-CSRF-TOKEN": token
-        },
-        success: function(data) {
-            if(data.name == "ADMIN") {
-                if(callback) callback(true);
-            }
-            if(callback) callback(false);
-        },
-        error: function() {
-            if(callback) callback(false);
-        },
-    });
-}*/
+function isAdmin() {
+    if(typeof hasAdmin === 'undefined') {
+        return false;
+    }
+    return hasAdmin;
+}

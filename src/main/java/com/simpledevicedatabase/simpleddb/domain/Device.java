@@ -11,23 +11,30 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+
+import org.springframework.hateoas.ResourceSupport;
 
 @Entity
 @Table(name="device")
-public class Device {
+public class Device extends ResourceSupport {
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "device_id", nullable = false, updatable = false)
-	private Long id;
+	private Long deviceId;
 	
 	@NotEmpty(message = "Name is required")
 	@Column(name = "name", unique = true)
 	private String name;
 	
+	@Pattern(regexp = "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$", message = "Invalid format")
 	@Column(name = "ip_address")
 	private String ipAddress;
+
+	@Pattern(regexp = "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$", message = "Invalid format")
 	@Column(name = "mac_address")
 	private String macAddress;
+	
 	@Column(name = "purchase_date")
 	private LocalDate purchaseDate;
 	
@@ -41,7 +48,9 @@ public class Device {
 	@JoinColumn(name = "model_id")
 	private DeviceModel model;
 
-    public Device() {}
+	public Device() {}
+	
+	public Device(Device device) {};
 
 	public Device(String name, DeviceType type, DeviceModel model, String ipAddress, String macAddress, String serial, LocalDate purchaseDate, String comment) {
 		super();
@@ -55,7 +64,7 @@ public class Device {
 		this.comment = comment;
 	}
 	//Getters
-	public Long getId() { return id; }
+	public Long getDeviceId() { return deviceId; }
 	public String getName() { return name; }
 	public DeviceType getType() { return type; }
 	public DeviceModel getModel() { return model; }

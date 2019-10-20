@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import org.springframework.hateoas.ResourceSupport;
 
 import java.util.List;
 
@@ -16,11 +17,11 @@ import javax.persistence.CascadeType;
 
 @Entity
 @Table(name="user_role")
-public class UserRole {
+public class UserRole extends ResourceSupport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
-    private Long id;
+    private Long roleId;
 
     @NotEmpty(message = "Name is required")
     private String name;
@@ -36,14 +37,14 @@ public class UserRole {
     /**
      * @return the id
      */
-    public Long getId() {
-        return id;
+    public Long getRoleId() {
+        return roleId;
     }
     /**
      * @param id the id to set
      */
-    public void setId(Long id) {
-        this.id = id;
+    public void setRoleId(Long id) {
+        this.roleId = id;
     }
 
     /**

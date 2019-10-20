@@ -1,5 +1,11 @@
 package com.simpledevicedatabase.simpleddb.domain;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
 
-public interface DeviceModelRepository extends CrudRepository<DeviceModel, Long> { }
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+
+@RepositoryRestResource
+public interface DeviceModelRepository extends CrudRepository<DeviceModel, Long> { 
+    List<DeviceModel> findAll();
+}

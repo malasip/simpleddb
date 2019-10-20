@@ -1,88 +1,73 @@
-/*package com.simpledevicedatabase.simpleddb.web;
+package com.simpledevicedatabase.simpleddb.web;
 
-import com.simpledevicedatabase.simpleddb.domain.User;
-import com.simpledevicedatabase.simpleddb.domain.UserRole;
-import com.simpledevicedatabase.simpleddb.domain.UserRepository;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.util.List;
-import java.util.Spliterator;
-import java.util.stream.Collectors;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import javax.validation.Valid;
 
-import org.apache.catalina.connector.Response;
+import com.simpledevicedatabase.simpleddb.domain.User;
+import com.simpledevicedatabase.simpleddb.domain.UserRepository;
+import com.simpledevicedatabase.simpleddb.domain.UserRole;
+import com.simpledevicedatabase.simpleddb.domain.UserRoleRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.http.ResponseEntity;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resources;
-import com.simpledevicedatabase.simpleddb.domain.UserResource;
-import java.net.URI;
-import java.util.stream.StreamSupport;
+
 
 @RestController
-@RequestMapping(value = "/api/users", produces = "application/hal+json")
+@RequestMapping(value = "/api/users")
 public class UserRestController {
-    
-    @Autowired
-    UserRepository repository;
 
-    @GetMapping
-    public ResponseEntity<Resources<UserResource>> all() {
-        final List<UserResource> collection =
-            StreamSupport.stream(repository.findAll().spliterator(), false).map(UserResource::new).collect(Collectors.toList());
-        final Resources<UserResource> resources = new Resources<>(collection);
-        final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-        resources.add(new Link(uriString, "self"));
-        return ResponseEntity.ok(resources);
+    @Autowired UserRepository userRepository;
+    @Autowired UserRoleRepository roleRepository;
+
+    @PostMapping(produces = "application/json")
+    ResponseEntity<User> addUser(@Valid @RequestBody User user) {
+        userRepository.save(user);
+        return ResponseEntity.ok(user);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResource> get(@PathVariable final Long id) {
-        return repository
-            .findById(id)
-            .map(u -> ResponseEntity.ok(new UserResource(u)))
-            .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+    @PatchMapping(produces = "application/json")
+    ResponseEntity<User> saveUser(@Valid @RequestBody User user) {
+        return ResponseEntity.ok(user);
     }
 
-    @PostMapping
-    public ResponseEntity<UserResource> post(@RequestBody User requestUser) {
-        final User user = new User(requestUser);
-        repository.save(user);
-        final URI uri = 
-            MvcUriComponentsBuilder.fromController(getClass())
-                .path("/{id}")
-                .buildAndExpand(user.getId())
-                .toUri();
-        return ResponseEntity.created(uri).body(new UserResource(user));
+    @GetMapping(produces = { "application/hal+json" })
+    Resources<User> getUsers() {
+        List<User> allUsers = userRepository.findAll();
+
+        for (User user : allUsers) {
+            Long userId = user.getUserId();
+            Link selfLink = linkTo(UserRestController.class).slash(userId).withSelfRel();
+            Link roleLink = linkTo(methodOn(UserRestController.class).getUserRole(userId)).withRel("role");
+            user.add(selfLink);
+            user.add(roleLink);
+        }
+        Link link = linkTo(UserRestController.class).withSelfRel();
+        Resources<User> result = new Resources<User>(allUsers, link);
+        return result;
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<UserResource> patch(@PathVariable("id") final Long id, @RequestBody User requestUser) {
-        final User user = new User(requestUser);
-        repository.save(user);
-        final UserResource resource = new UserResource(user);
-        final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-        return ResponseEntity.created(uri).body(resource);
+    @GetMapping(value = "/{id}/role", produces = { "application/hal+json" })
+    Resource<UserRole> getUserRole(@PathVariable Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invalid ID: " + id));
+        UserRole role = user.getRole();
+        Link selfLink = linkTo(methodOn(UserRoleRestController.class).getRole(role.getRoleId())).withSelfRel();
+        role.add(selfLink);
+        Resource<UserRole> result = new Resource<UserRole>(role);
+        return result;
     }
-
-
-    /*@PatchMapping("/api/users/{id}")
-    public HttpEntity<User> getUser(@PathVariable Long id) {
-        User user = repository.findById(id).orElseThrow();
-        //user.add(linkTo(methodOn(UserRestController.class).getUser(id)).withSelfRel());
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-}*/
+}

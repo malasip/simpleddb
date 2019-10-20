@@ -11,10 +11,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.hateoas.ResourceSupport;
+
 
 @Entity
 @Table(name="device_model")
-public class DeviceModel {
+public class DeviceModel extends ResourceSupport{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long model_id;
@@ -33,8 +35,9 @@ public class DeviceModel {
     }
 
     //Getters
-    public Long getId() { return model_id; }
+    public Long getModelId() { return model_id; }
     public String getName() { return name; }
+    public List<Device> getDevices() { return devices; };
     //Setters
     public void setName(String name) { this.name = name; }
 }
