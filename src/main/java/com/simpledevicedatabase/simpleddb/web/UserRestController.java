@@ -30,13 +30,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping(value = "/api/users")
+@RequestMapping(value = "/api/users", produces = "application/hal+json")
 public class UserRestController {
 
     @Autowired UserRepository userRepository;
     @Autowired UserRoleRepository roleRepository;
 
-    @PostMapping(produces = "application/json")
+    @PostMapping(produces = "application/hal+json")
     ResponseEntity<?> addUser(@Valid @RequestBody User user) {
         try {
             userRepository.save(user);
@@ -46,7 +46,7 @@ public class UserRestController {
         return ResponseEntity.ok(user);
     }
 
-    @PatchMapping(value = "/{id}", produces = "application/json")
+    @PatchMapping(value = "/{id}", produces = "application/hal+json")
     ResponseEntity<User> saveUser(@Valid @RequestBody User newUser, @PathVariable Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invalid ID:" + id));
         if(newUser.getPassword().compareTo("noupdate") != 0) {
@@ -59,7 +59,7 @@ public class UserRestController {
         return ResponseEntity.ok(user);
     }
 
-    @DeleteMapping(value = "/{id}", produces = "application/json")
+    @DeleteMapping(value = "/{id}", produces = "application/hal+json")
     ResponseEntity<?> deleteDevice(@PathVariable Long id) {
         return userRepository.findById(id).map(m -> {
             userRepository.deleteById(id);
@@ -67,7 +67,7 @@ public class UserRestController {
         }).orElseThrow(() -> new ResourceNotFoundException("Invalid ID:" + id));
     }
 
-    @GetMapping(value = "/{id}", produces = { "application/hal+json" })
+    @GetMapping(value = "/{id}", produces = "application/hal+json")
     Resource<User> getUser(@PathVariable Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invalid ID: " + id));
         Link selfLink = linkTo(UserRestController.class).slash(id).withSelfRel();
@@ -78,7 +78,7 @@ public class UserRestController {
         return result;
     }
 
-    @GetMapping(produces = { "application/hal+json" })
+    @GetMapping(produces = "application/hal+json")
     Resources<User> getUsers() {
         List<User> allUsers = userRepository.findAll();
 
@@ -94,7 +94,7 @@ public class UserRestController {
         return result;
     }
 
-    @GetMapping(value = "/{id}/role", produces = { "application/hal+json" })
+    @GetMapping(value = "/{id}/role", produces = "application/hal+json")
     Resource<UserRole> getUserRole(@PathVariable Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invalid ID: " + id));
         UserRole role = user.getRole();

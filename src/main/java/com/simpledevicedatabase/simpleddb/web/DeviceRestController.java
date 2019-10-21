@@ -34,14 +34,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/api/devices")
+@RequestMapping(value = "/api/devices", produces = "application/hal+json")
 public class DeviceRestController {
 
     @Autowired DeviceRepository deviceRepository;
     @Autowired DeviceTypeRepository deviceTypeRepository;
     @Autowired DeviceModelRepository deviceModelRepository;
 
-    @PostMapping(produces = "application/json")
+    @PostMapping(produces = "application/hal+json")
     ResponseEntity<?> addDevice(@Valid @RequestBody Device device) {
         try {
             deviceRepository.save(device);
@@ -51,7 +51,7 @@ public class DeviceRestController {
         return ResponseEntity.ok(device);
     }
 
-    @PatchMapping(value = "/{id}", produces = "application/json")
+    @PatchMapping(value = "/{id}", produces = "application/hal+json")
     ResponseEntity<Device> saveDevice(@Valid @RequestBody Device newDevice, @PathVariable Long id) {
         Device device = deviceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invalid ID:" + id));
         if(newDevice.getName() != "") { device.setName(newDevice.getName()); }
@@ -66,7 +66,7 @@ public class DeviceRestController {
         return ResponseEntity.ok(device);
     }
 
-    @DeleteMapping(value = "/{id}", produces = "application/json")
+    @DeleteMapping(value = "/{id}", produces = "application/hal+json")
     ResponseEntity<?> deleteDevice(@PathVariable Long id) {
         return deviceRepository.findById(id).map(m -> {
             deviceRepository.deleteById(id);
@@ -74,7 +74,7 @@ public class DeviceRestController {
         }).orElseThrow(() -> new ResourceNotFoundException("Invalid ID:" + id));
     }
 
-    @GetMapping(produces = { "application/hal+json" })
+    @GetMapping(produces = "application/hal+json")
     Resources<?> getDevices() {
         List<Device> allDevices = deviceRepository.findAll();
         Link link = linkTo(DeviceRestController.class).withSelfRel();
@@ -98,7 +98,7 @@ public class DeviceRestController {
         }
     }
 
-    @GetMapping(value = "/{id}", produces = { "application/hal+json" })
+    @GetMapping(value = "/{id}", produces = "application/hal+json")
     Resource<Device> getDevice(@PathVariable Long id) {
         Device device = deviceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invalid ID: " + id));
         Link selfLink = linkTo(DeviceRestController.class).slash(id).withSelfRel();
@@ -111,7 +111,7 @@ public class DeviceRestController {
         return result;
     }
 
-    @GetMapping(value = "/{id}/type", produces = { "application/hal+json" })
+    @GetMapping(value = "/{id}/type", produces = "application/hal+json")
     Resource<DeviceType> getDeviceType(@PathVariable Long id) {
         Device device = deviceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invalid ID: " + id));
         DeviceType type = device.getType();
@@ -121,7 +121,7 @@ public class DeviceRestController {
         return result;
     }
 
-    @GetMapping(value = "/{id}/model", produces = { "application/hal+json" })
+    @GetMapping(value = "/{id}/model", produces = "application/hal+json")
     Resource<DeviceModel> getDeviceModel(@PathVariable Long id) {
         Device device = deviceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invalid ID: " + id));
         DeviceModel model = device.getModel();

@@ -75,7 +75,6 @@ public class User extends ResourceSupport{
     
     //Getters
     public Long getUserId() { return userId; }
-    //public Link getId() { return id; }
     public String getUsername() { return username; }
     public String getPassword() { return password; }
     public UserRole getRole() { return role; }
@@ -92,7 +91,6 @@ public class User extends ResourceSupport{
 
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
         return super.toString();
     }
 }

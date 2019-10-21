@@ -37,35 +37,16 @@ public class UserRole extends ResourceSupport {
     public UserRole(String name) {
         this.name = name;
     }
-    /**
-     * @return the id
-     */
-    public Long getRoleId() {
-        return roleId;
-    }
-    /**
-     * @param id the id to set
-     */
-    public void setRoleId(Long id) {
-        this.roleId = id;
-    }
 
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+    //Getters
+    public Long getRoleId() { return roleId; }
+    public String getName() { return name; }
+    //Setters
+    public void setRoleId(Long id) { this.roleId = id; }
+    public void setName(String name) { this.name = name; }
 
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
         return super.toString();
     }
 }

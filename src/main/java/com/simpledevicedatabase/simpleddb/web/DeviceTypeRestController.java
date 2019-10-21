@@ -32,13 +32,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/api/deviceTypes", produces = { "application/hal+json" })
+@RequestMapping(value = "/api/deviceTypes", produces = "application/hal+json")
 public class DeviceTypeRestController {
 
     @Autowired DeviceTypeRepository typeRepository;
     @Autowired DeviceRepository deviceRepository;
 
-    @PostMapping(produces = "application/json")
+    @PostMapping(produces = "application/hal+json")
     ResponseEntity<?> addType(@Valid @RequestBody DeviceType type) {
         try {
             typeRepository.save(type);
@@ -48,7 +48,7 @@ public class DeviceTypeRestController {
         return ResponseEntity.ok(type);
     }
 
-    @PatchMapping(value = "/{id}", produces = "application/json")
+    @PatchMapping(value = "/{id}", produces = "application/hal+json")
     ResponseEntity<DeviceType> saveType(@Valid @RequestBody DeviceType newType, @PathVariable Long id) {
         DeviceType type = typeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invalid ID:" + id));
         type.setName(newType.getName());
@@ -56,7 +56,7 @@ public class DeviceTypeRestController {
         return ResponseEntity.ok(type);
     }
 
-    @DeleteMapping(value = "/{id}", produces = "application/json")
+    @DeleteMapping(value = "/{id}", produces = "application/hal+json")
     ResponseEntity<?> deleteType(@PathVariable Long id) {
         return typeRepository.findById(id).map(m -> {
             typeRepository.deleteById(id);
@@ -64,7 +64,7 @@ public class DeviceTypeRestController {
         }).orElseThrow(() -> new ResourceNotFoundException("Invalid ID:" + id));
     }
 
-    @GetMapping
+    @GetMapping(produces = "application/hal+json")
     Resources<?> getAllTypes() {
         List<DeviceType> allTypes = typeRepository.findAll();
         Link link = linkTo(DeviceTypeRestController.class).withSelfRel();
@@ -86,7 +86,7 @@ public class DeviceTypeRestController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = "application/hal+json")
     Resource<DeviceType> getType(@PathVariable Long id) {
         DeviceType type = typeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invalid ID:" + id));
         Link selfLink = linkTo(DeviceTypeRestController.class).slash(id).withSelfRel();
@@ -97,7 +97,7 @@ public class DeviceTypeRestController {
         return result;
     }
 
-    @GetMapping("/{id}/devices")
+    @GetMapping(value = "/{id}/devices", produces = "application/hal+json")
     Resources<?> getTypeDevices(@PathVariable Long id) {
         DeviceType type = typeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invalid ID:" + id));
         Link link = linkTo(methodOn(DeviceTypeRestController.class).getTypeDevices(id)).withSelfRel();

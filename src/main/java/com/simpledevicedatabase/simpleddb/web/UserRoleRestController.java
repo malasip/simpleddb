@@ -10,20 +10,20 @@ import com.simpledevicedatabase.simpleddb.domain.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.hateoas.Resource;
 
 @RestController
-@RequestMapping(value = "/api/userRoles", produces = { "application/hal+json" })
+@RequestMapping(value = "/api/userRoles", produces = "application/hal+json")
 public class UserRoleRestController {
 
     @Autowired UserRoleRepository repository;
 
-    @GetMapping
+    @GetMapping(produces = "application/hal+json")
     public Resources<UserRole> getAllRoles() {
         List<UserRole> allRoles = repository.findAll();
 
@@ -37,7 +37,7 @@ public class UserRoleRestController {
         return result;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = "application/hal+json")
     public Resource<UserRole> getRole(@PathVariable Long id) {
         UserRole role = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invalid ID:" + id));
         Link selfLink = linkTo(UserRoleRestController.class).slash(id).withSelfRel();
