@@ -135,10 +135,10 @@ function loadTable() {
                                 }
                             }
                         });
-                        $('#device-ipaddress').val(data.ipAddress);
-                        $('#device-macaddress').val(data.macAddress);
-                        $('#device-serial-no').val(data.serial);
-                        $('#device-purchase-date').val(data.purchaseDate);
+                        $('#device-ipAddress').val(data.ipAddress);
+                        $('#device-macAddress').val(data.macAddress);
+                        $('#device-serial').val(data.serial);
+                        $('#device-purchaseDate').val(data.purchaseDate);
                         $('#device-comment').val(data.comment);
                         $('#modal-delete').val(data._links.self.href);
                         if(!isAdmin()) {
@@ -177,6 +177,9 @@ function saveItem(object, callback) {
         url = data['device-id'];
         type = 'PATCH';
     }
+    $('input').each(function () {
+        $(this).removeClass('is-invalid');
+    });
     $.ajax({
         type: type,
         url: url,
@@ -189,9 +192,13 @@ function saveItem(object, callback) {
             callback();
         },
         error: function(error) {
-            error.responseJSON.errors.forEach(element => {
-                $('#'+ element.field).addClass('is-invalid');
-            })
+            if(error.responseText == "Duplicate entry") {
+                alert("Device with this name already exists");
+            } else {
+                error.responseJSON.errors.forEach(element => {
+                    $('#device-'+ element.field).addClass('is-invalid');
+                })
+            }
         },
         contentType: "application/json",
         dataType: 'json'

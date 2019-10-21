@@ -16,6 +16,7 @@ import com.simpledevicedatabase.simpleddb.domain.DeviceType;
 import com.simpledevicedatabase.simpleddb.domain.DeviceTypeRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
@@ -23,6 +24,7 @@ import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.core.EmbeddedWrapper;
 import org.springframework.hateoas.core.EmbeddedWrappers;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,26 +42,36 @@ public class DeviceRestController {
     @Autowired DeviceModelRepository deviceModelRepository;
 
     @PostMapping(produces = "application/json")
-    ResponseEntity<Device> addDevice(@Valid @RequestBody Device device) {
-        deviceRepository.save(device);
+    ResponseEntity<?> addDevice(@Valid @RequestBody Device device) {
+        try {
+            deviceRepository.save(device);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.badRequest().body("Duplicate entry");
+        }
         return ResponseEntity.ok(device);
     }
 
     @PatchMapping(value = "/{id}", produces = "application/json")
     ResponseEntity<Device> saveDevice(@Valid @RequestBody Device newDevice, @PathVariable Long id) {
         Device device = deviceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invalid ID:" + id));
-        /*device.setDeviceId()
-		device.setName = name;
-		device.setType = type;
-		device.setModel = model;
-		device.setIpAddress = ipAddress;
-		device.setMacAddress = macAddress;
-		device.setSerial = serial;
-		device.setPurchaseDate = purchaseDate;
-		device.setComment = comment;
-        device.setName(newType.getName());
-        deviceRepository.save(device);*/
+        if(newDevice.getName() != "") { device.setName(newDevice.getName()); }
+        if(newDevice.getType() != null) { device.setType(newDevice.getType()); }
+        if(newDevice.getModel() != null) { device.setModel(newDevice.getModel()); }
+        if(newDevice.getIpAddress() != "") { device.setIpAddress(newDevice.getIpAddress()); }
+        if(newDevice.getMacAddress() != "") { device.setMacAddress(newDevice.getMacAddress()); }
+        if(newDevice.getSerial() != "") { device.setSerial(newDevice.getSerial()); }
+        if(newDevice.getPurchaseDate() != null) { device.setPurchaseDate(newDevice.getPurchaseDate()); }
+        if(newDevice.getComment() != "") { device.setComment(newDevice.getComment()); }
+        deviceRepository.save(device);
         return ResponseEntity.ok(device);
+    }
+
+    @DeleteMapping(value = "/{id}", produces = "application/json")
+    ResponseEntity<?> deleteDevice(@PathVariable Long id) {
+        return deviceRepository.findById(id).map(m -> {
+            deviceRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }).orElseThrow(() -> new ResourceNotFoundException("Invalid ID:" + id));
     }
 
     @GetMapping(produces = { "application/hal+json" })
@@ -86,7 +98,7 @@ public class DeviceRestController {
         }
     }
 
-    /*@GetMapping(value = "/{id}", produces = { "application/hal+json" })
+    @GetMapping(value = "/{id}", produces = { "application/hal+json" })
     Resource<Device> getDevice(@PathVariable Long id) {
         Device device = deviceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Invalid ID: " + id));
         Link selfLink = linkTo(DeviceRestController.class).slash(id).withSelfRel();
@@ -97,7 +109,7 @@ public class DeviceRestController {
         device.add(modelLink);
         Resource<Device> result = new Resource<Device>(device);
         return result;
-    }*/
+    }
 
     @GetMapping(value = "/{id}/type", produces = { "application/hal+json" })
     Resource<DeviceType> getDeviceType(@PathVariable Long id) {

@@ -14,6 +14,7 @@ import com.simpledevicedatabase.simpleddb.domain.DeviceModelRepository;
 import com.simpledevicedatabase.simpleddb.domain.DeviceRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
@@ -38,8 +39,12 @@ public class DeviceModelRestController {
     @Autowired DeviceRepository deviceRepository;
 
     @PostMapping(produces = "application/json")
-    ResponseEntity<DeviceModel> addModel(@Valid @RequestBody DeviceModel model) {
-        modelRepository.save(model);
+    ResponseEntity<?> addModel(@Valid @RequestBody DeviceModel model) {
+        try {
+            modelRepository.save(model);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.badRequest().body("Duplicate entry");
+        }
         return ResponseEntity.ok(model);
     }
 
@@ -88,8 +93,6 @@ public class DeviceModelRestController {
         model.add(selfLink);
         Link devicesLink = linkTo(methodOn(DeviceModelRestController.class).getModelDevices(id)).withRel("devices");
         model.add(devicesLink);
-        //Link link = linkTo(DeviceModelRestController.class).withSelfRel();
-        //Resource<DeviceModel> result = new Resource<DeviceModel>(model, link);
         Resource<DeviceModel> result = new Resource<DeviceModel>(model);
         return result;
     }

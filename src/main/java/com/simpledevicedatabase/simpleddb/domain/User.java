@@ -15,6 +15,7 @@ import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.hateoas.ResourceSupport;
 
 @Entity
@@ -26,17 +27,22 @@ public class User extends ResourceSupport{
     private Long userId;
 
     @NotEmpty(message = "Username is requried")
-    @Column(name = "username", nullable = false, updatable = false)
+    @Length(max = 25)
+    @Column(name = "username", nullable = false, updatable = false, unique = true)
     private String username;
 
     @NotEmpty(message = "Password is required")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Length(max = 120)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
     @Email
+    @Length(max = 45)
+    @Column(name = "email")
     private String email;
 
     @ManyToOne
@@ -44,7 +50,7 @@ public class User extends ResourceSupport{
 	private UserRole role;
 
     @Column(name = "active", nullable = false)
-    private boolean active = false;
+    private boolean active;
     
     public User() {}
 
@@ -53,6 +59,11 @@ public class User extends ResourceSupport{
         this.password = password;
         this.email= email;
         this.role = role;
+    }
+    public User(String email, UserRole role, boolean active) {
+        this.email= email;
+        this.role = role;
+        this.active = active;
     }
     public User(String username, String password, String email, UserRole role, boolean active) {
         this.username = username;
@@ -74,7 +85,7 @@ public class User extends ResourceSupport{
     //Setters
     public void setUsername(String username) { this.username = username; }
     public void setPassword(String password) { this.password = password; }
-    public void setUserRole(UserRole role) { this.role = role; }
+    public void setRole(UserRole role) { this.role = role; }
     public void setEmail(String email) { this.email = email; }
     public void setActive(boolean active) { this.active = active; }
     public void setLastLogin(LocalDateTime lastLogin) { this.lastLogin = lastLogin; }

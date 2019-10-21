@@ -9,12 +9,12 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.simpledevicedatabase.simpleddb.domain.Device;
-import com.simpledevicedatabase.simpleddb.domain.DeviceModel;
 import com.simpledevicedatabase.simpleddb.domain.DeviceRepository;
 import com.simpledevicedatabase.simpleddb.domain.DeviceType;
 import com.simpledevicedatabase.simpleddb.domain.DeviceTypeRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
@@ -22,6 +22,7 @@ import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.core.EmbeddedWrapper;
 import org.springframework.hateoas.core.EmbeddedWrappers;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,8 +39,12 @@ public class DeviceTypeRestController {
     @Autowired DeviceRepository deviceRepository;
 
     @PostMapping(produces = "application/json")
-    ResponseEntity<DeviceType> addType(@Valid @RequestBody DeviceType type) {
-        typeRepository.save(type);
+    ResponseEntity<?> addType(@Valid @RequestBody DeviceType type) {
+        try {
+            typeRepository.save(type);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.badRequest().body("Duplicate entry");
+        }
         return ResponseEntity.ok(type);
     }
 
@@ -49,6 +54,14 @@ public class DeviceTypeRestController {
         type.setName(newType.getName());
         typeRepository.save(type);
         return ResponseEntity.ok(type);
+    }
+
+    @DeleteMapping(value = "/{id}", produces = "application/json")
+    ResponseEntity<?> deleteType(@PathVariable Long id) {
+        return typeRepository.findById(id).map(m -> {
+            typeRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }).orElseThrow(() -> new ResourceNotFoundException("Invalid ID:" + id));
     }
 
     @GetMapping
@@ -80,8 +93,6 @@ public class DeviceTypeRestController {
         type.add(selfLink);
         Link devicesLink = linkTo(methodOn(DeviceTypeRestController.class).getTypeDevices(id)).withRel("devices");
         type.add(devicesLink);
-        //Link link = linkTo(DeviceTypeRestController.class).withSelfRel();
-        //Resource<DeviceType> result = new Resource<DeviceType>(type, link);
         Resource<DeviceType> result = new Resource<DeviceType>(type);
         return result;
     }

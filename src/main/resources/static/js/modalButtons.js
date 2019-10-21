@@ -9,7 +9,7 @@ function userButton() {
             $.getJSON(user, function( data ) {
                 $('#user-id').val(data._links.self.href);
                 $('#username').val(data.username);
-                $("#modalLabel").text(data.username);
+                $("#modalLabel").text("Edit user");
                 $.ajax({
                     async: true,
                     url: data._links.role.href,
@@ -27,10 +27,10 @@ function userButton() {
                     }
                 });
                 $('#email').val(data.email);
-                $('#active').remove();
+                $('#active-div').remove();
                 $('#modal-delete').remove();
-                //$('#username').prop('disabled', true);
-                //$('#role').prop('disabled', true);
+                $('#username').prop('disabled', true);
+                $('#role').prop('disabled', true);
             });
             $('#userForm').submit(function( event ) {
                 event.preventDefault();

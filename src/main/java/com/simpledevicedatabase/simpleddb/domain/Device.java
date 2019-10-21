@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.hateoas.ResourceSupport;
 
 @Entity
@@ -24,21 +25,30 @@ public class Device extends ResourceSupport {
 	private Long deviceId;
 	
 	@NotEmpty(message = "Name is required")
+	@Length(max = 25)
 	@Column(name = "name", unique = true)
 	private String name;
 	
 	@Pattern(regexp = "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$", message = "Invalid format")
+	@Length(max = 12)
 	@Column(name = "ip_address")
 	private String ipAddress;
 
 	@Pattern(regexp = "^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$", message = "Invalid format")
+	@Length(max = 17)
 	@Column(name = "mac_address")
 	private String macAddress;
 	
 	@Column(name = "purchase_date")
 	private LocalDate purchaseDate;
 	
-	private String serial, comment;
+	@Length(max = 20)
+	@Column(name = "serial")
+	private String serial;
+
+	@Length(max = 500)
+	@Column(name = "comment")
+	private String comment;
 
 	@ManyToOne
 	@JoinColumn(name = "type_id")

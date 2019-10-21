@@ -98,9 +98,13 @@ function saveItem(object, callback) {
             callback();
         },
         error: function(error) {
-            error.responseJSON.errors.forEach(element => {
-                $('#'+ element.field).addClass('is-invalid');
-            })
+            if(error.responseText == "Duplicate entry") {
+                alert("Type with this name already exists");
+            } else {
+                error.responseJSON.errors.forEach(element => {
+                    $('#item-'+ element.field).addClass('is-invalid');
+                })
+            }
         },
         contentType: "application/json",
         dataType: 'json'

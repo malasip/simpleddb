@@ -24,9 +24,10 @@
         <label for="email" class="col-sm-4 col-form-label">Email</label>
         <div class="col-sm-8">
             <input type="text" class="form-control" name="email" id="email" placeholder="Email">
+            <div class="invalid-feedback">Invalid email address</div>
         </div>
     </div>
-    <div sec:authorize="hasAuthority('ADMIN')" class="form-group row">
+    <div sec:authorize="hasAuthority('ADMIN')" class="form-group row" id="active-idv">
        <label for="active" class="col-sm-4 col-form-label">Account active</label>
        <div class="col-sm-8">
             <input type="checkbox" class="form-control" name="active" id="active">

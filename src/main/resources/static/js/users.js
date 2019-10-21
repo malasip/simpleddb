@@ -70,7 +70,7 @@ function loadTable() {
                     }
                     $.getJSON(item, function( data ) {
                         $('#user-id').val(data._links.self.href);
-                        $('#username').val(data.username);
+                        $('#username').val(data.username).prop('disabled', true);
                         $.ajax({
                             async: true,
                             url: data._links.role.href,
@@ -132,6 +132,7 @@ function saveUser(object, callback) {
                     data["password"] = bcrypt.hashSync(v.value, 10);
                 }
             } else if (v.name == "active") {
+                console.log($('#active').attr('checked'));
                 data[v.name] = true;
             } else {
                 data[v.name] = v.value;
@@ -139,8 +140,20 @@ function saveUser(object, callback) {
         });
         if (data['user-id']) {
             url = data['user-id'];
+            if(!data["password"]) {
+                data["password"] = "noupdate";
+            }
+            if(!data["username"]) {
+                data["username"] = "noupdate";
+            }
+            if(!data["active"] && !$('#active').length) {
+                data["active"] = true;
+            }
             type = 'PATCH';
         }
+        $('input').each(function () {
+            $(this).removeClass('is-invalid');
+        });
         $.ajax({
             type: type,
             url: url,
@@ -153,9 +166,13 @@ function saveUser(object, callback) {
                 callback();
             },
             error: function(error) {
-                error.responseJSON.errors.forEach(element => {
-                    $('#'+ element.field).addClass('is-invalid');
-                })
+                if(error.responseText == "Duplicate entry") {
+                    alert("User with this name already exists");
+                } else {
+                    error.responseJSON.errors.forEach(element => {
+                        $('#'+ element.field).addClass('is-invalid');
+                    })
+                }
             },
             contentType: "application/json",
             dataType: 'json'
